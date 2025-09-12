@@ -1,0 +1,2 @@
+WEATHER_API_KEY = "ad5a8c55989f66bc32c7415c147bfc61"
+CITY = "London"
