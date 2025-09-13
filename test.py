@@ -1,25 +1,27 @@
 import pytest
-from main import get_weather
-from config import WEATHER_API_KEY, CITY
+from main import get_github_user
 
-def test_get_weather(mocker):
+def test_get_github_user(mocker):
     mock_get = mocker.patch('main.requests.get')
     mock_get.return_value.status_code = 200
     mock_get.return_value.json.return_value = {
-        'weather': [{'description': 'clear sky'}],
-        'main': {'temp': 25}
-        }
-
-
-    weather_data = get_weather(WEATHER_API_KEY, CITY)
-    assert weather_data == {
-        'weather': [{'description': 'clear sky'}],
-        'main': {'temp': 25}
+        'login': 'ValeraGigachat',
+        'id': 123456,
+        'name': 'Valera'
     }
 
-def test_get_weather_with_error(mocker):
-    mock_get = mocker.patch('main.requests.get')
-    mock_get.return_value.status_code = 404
+    user_data = get_github_user('ValeraGigachat')
+    assert user_data == {
+        'login': 'ValeraGigachat',
+        'id': 123456,
+        'name': 'Valera'
+    }
 
-    weather_data = get_weather(WEATHER_API_KEY, CITY)
-    assert weather_data == None
+
+def test_get_github_user_invalid(mocker):
+    mock_get = mocker.patch('main.requests.get')
+    mock_get.return_value.status_code = 500
+
+
+    user_data = get_github_user('ValeraGigachat')
+    assert user_data == None
